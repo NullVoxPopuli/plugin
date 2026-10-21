@@ -1,5 +1,22 @@
 # Changelog
 
+## Release (2026-10-21)
+
+* @svg-jar/plugin 0.2.2 (patch)
+
+#### :bug: Bug Fix
+* `@svg-jar/plugin`
+  * [#15](https://github.com/svg-jar/plugin/pull/15) Declare framework packages as optional peer dependencies ([@evoactivity](https://github.com/evoactivity))
+
+#### :house: Internal
+* `@svg-jar/plugin`
+  * [#18](https://github.com/svg-jar/plugin/pull/18) Type-check each project on its own, and in CI ([@evoactivity](https://github.com/evoactivity))
+* Other
+  * [#16](https://github.com/svg-jar/plugin/pull/16) Run the E2E tests on Ubuntu 24.04 ([@evoactivity](https://github.com/evoactivity))
+
+#### Committers: 1
+- Liam ([@evoactivity](https://github.com/evoactivity))
+
 ## Release (2026-07-28)
 
 * @svg-jar/plugin 0.2.1 (patch)

@@ -2,17 +2,21 @@
   "solution": {
     "@svg-jar/plugin": {
       "impact": "patch",
-      "oldVersion": "0.2.0",
-      "newVersion": "0.2.1",
+      "oldVersion": "0.2.1",
+      "newVersion": "0.2.2",
       "tagName": "latest",
       "constraints": [
         {
           "impact": "patch",
           "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./plugin/package.json"
     }
   },
-  "description": "## Release (2026-07-28)\n\n* @svg-jar/plugin 0.2.1 (patch)\n\n#### :bug: Bug Fix\n* `@svg-jar/plugin`\n  * [#12](https://github.com/svg-jar/plugin/pull/12) Fix SOURCEMAP_BROKEN warnings: return an empty sourcemap from the transform hook ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### :house: Internal\n* [#13](https://github.com/svg-jar/plugin/pull/13) Update Node.js version matrix in CI workflow ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 1\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+  "description": "## Release (2026-10-21)\n\n* @svg-jar/plugin 0.2.2 (patch)\n\n#### :bug: Bug Fix\n* `@svg-jar/plugin`\n  * [#15](https://github.com/svg-jar/plugin/pull/15) Declare framework packages as optional peer dependencies ([@evoactivity](https://github.com/evoactivity))\n\n#### :house: Internal\n* `@svg-jar/plugin`\n  * [#18](https://github.com/svg-jar/plugin/pull/18) Type-check each project on its own, and in CI ([@evoactivity](https://github.com/evoactivity))\n* Other\n  * [#16](https://github.com/svg-jar/plugin/pull/16) Run the E2E tests on Ubuntu 24.04 ([@evoactivity](https://github.com/evoactivity))\n\n#### Committers: 1\n- Liam ([@evoactivity](https://github.com/evoactivity))\n"
 }
