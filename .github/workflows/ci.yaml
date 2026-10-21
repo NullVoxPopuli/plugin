@@ -126,3 +126,5 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @svg-jar/plugin build
+      # the test projects import the plugin's built dist
+      - run: pnpm typecheck

@@ -109,6 +109,34 @@
     "tsdown": "catalog:",
     "vitest": "catalog:"
   },
+  "peerDependencies": {
+    "@glint/template": ">=1.0.0",
+    "ember-source": ">=6.1.0",
+    "preact": ">=10.0.0",
+    "react": ">=16.8.0",
+    "solid-js": ">=1.7.0",
+    "vue": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@glint/template": {
+      "optional": true
+    },
+    "ember-source": {
+      "optional": true
+    },
+    "preact": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "solid-js": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
   "packageManager": "pnpm@10.32.1",
   "engines": {
     "node": ">=20"

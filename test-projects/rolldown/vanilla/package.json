@@ -5,7 +5,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "rolldown -c && cp index.html dist/",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@svg-jar/plugin": "workspace:*",

@@ -5,7 +5,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@svg-jar/plugin": "workspace:*",

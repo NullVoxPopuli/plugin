@@ -9,6 +9,8 @@ export default defineConfig({
     // resolves @ember/* from the plugin's real path instead of the app's
     // node_modules. preserveSymlinks prevents this.
     preserveSymlinks: true,
+    // the linked plugin now has its own copies of its peers; use the app's
+    dedupe: ['ember-source', '@glimmer/component'],
   },
   plugins: [
     svgJar({ target: 'ember' }),

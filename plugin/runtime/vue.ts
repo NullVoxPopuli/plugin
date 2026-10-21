@@ -1,5 +1,4 @@
-// @ts-expect-error vue is a peer dependency provided by the consuming app
-import { h, markRaw } from 'vue';
+import { h, markRaw, type VNode, type VNodeArrayChildren } from 'vue';
 
 /**
  * Creates a Vue component that renders an SVG sprite symbol via `<use href>`.
@@ -20,17 +19,11 @@ export const createSvg: (
   height: string | null,
   href: string,
 ) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   return markRaw({
     inheritAttrs: false,
-    render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => unknown[] } }) {
+    render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => VNode[] } }) {
       const attrs = { viewBox, width, height, ...this.$attrs };
-      const children = [
-        ...(this.$slots.default?.() ?? []),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        h('use', { href }),
-      ];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+      const children: VNodeArrayChildren = [...(this.$slots.default?.() ?? []), h('use', { href })];
       return h('svg', attrs, children);
     },
   });
@@ -56,17 +49,11 @@ export const createSvgInline: (
   height: string | null,
   xml: string,
 ) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   return markRaw({
     inheritAttrs: false,
-    render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => unknown[] } }) {
+    render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => VNode[] } }) {
       const attrs = { viewBox, width, height, ...this.$attrs };
-      const children = [
-        ...(this.$slots.default?.() ?? []),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        h('g', { innerHTML: xml }),
-      ];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+      const children: VNodeArrayChildren = [...(this.$slots.default?.() ?? []), h('g', { innerHTML: xml })];
       return h('svg', attrs, children);
     },
   });
