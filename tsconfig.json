@@ -14,6 +14,5 @@
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["./plugin/client"]
+  "include": ["*.ts"]
 }

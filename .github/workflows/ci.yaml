@@ -43,6 +43,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @svg-jar/plugin lint
       - run: pnpm --filter @svg-jar/plugin prettier
+      - run: pnpm typecheck
 
   unit:
     name: Unit tests (Node ${{ matrix.node-version }})

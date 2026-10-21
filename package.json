@@ -18,7 +18,7 @@
     "prettier": "prettier --check .",
     "sortPackageJson": "pnpm dlx sort-package-json",
     "test": "pnpm --filter @svg-jar/plugin test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && pnpm --recursive --if-present typecheck"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access */
-// @ts-expect-error solid-js is a peer dependency provided by the consuming app
 import { type JSX, type ParentProps, splitProps } from 'solid-js';
-// @ts-expect-error solid-js is a peer dependency provided by the consuming app
 import { insert, spread, template } from 'solid-js/web';
 
 type SvgProps = ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>;
@@ -30,7 +27,10 @@ export const createSvg: (
   );
 
   return (props: SvgProps) => {
-    const el: SVGSVGElement = tmpl();
+    const el = tmpl();
+    if (!(el instanceof SVGSVGElement)) {
+      throw new Error('svg-jar: the SVG template did not produce an <svg> element');
+    }
     const [local, rest] = splitProps(props, ['children']);
     spread(el, rest, true, true);
 
@@ -68,7 +68,10 @@ export const createSvgInline: (
   );
 
   return (props: SvgProps) => {
-    const el: SVGSVGElement = tmpl();
+    const el = tmpl();
+    if (!(el instanceof SVGSVGElement)) {
+      throw new Error('svg-jar: the SVG template did not produce an <svg> element');
+    }
     const [local, rest] = splitProps(props, ['children']);
     spread(el, rest, true, true);
 

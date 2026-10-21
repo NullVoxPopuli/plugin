@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-redundant-type-constituents */
-// @ts-expect-error preact is a peer dependency provided by the consuming app
 import { h, type JSX } from 'preact';
-// @ts-expect-error -- preact is a peer dependency provided by the consuming app
 import { useCallback } from 'preact/hooks';
 
 type SvgProps = JSX.SVGAttributes<SVGSVGElement> & {
