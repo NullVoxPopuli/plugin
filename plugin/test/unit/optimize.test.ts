@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { optimizeSvg } from '../../src/svg/optimize.ts';
+import { baselineSvgoConfig } from '../../src/index.ts';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, '..', '_fixtures');
 
@@ -71,6 +72,34 @@ describe('optimizeSvg', () => {
     });
   });
 
+  describe('baselineSvgoConfig', () => {
+    it('is the config used when svgo is true', () => {
+      const input = readFixture('source-order.svg');
+
+      expect(optimizeSvg(input, { plugins: [...baselineSvgoConfig.plugins] })).toBe(optimizeSvg(input, true));
+    });
+
+    it('can be extended with more plugins', () => {
+      const input = readFixture('with-dimensions.svg');
+      const output = optimizeSvg(input, { plugins: [...baselineSvgoConfig.plugins, 'removeDimensions'] });
+
+      // removeDimensions ran
+      expect(output).not.toContain('width="24"');
+      // The baseline cleanupIds settings still apply
+      expect(optimizeSvg(readFixture('nested-groups.svg'), { plugins: [...baselineSvgoConfig.plugins] })).toContain(
+        'id="outer"',
+      );
+    });
+
+    it('cannot be changed by the caller', () => {
+      expect(Object.isFrozen(baselineSvgoConfig)).toBe(true);
+      expect(Object.isFrozen(baselineSvgoConfig.plugins)).toBe(true);
+      expect(() => {
+        (baselineSvgoConfig.plugins as unknown[]).push('removeDimensions');
+      }).toThrow(TypeError);
+    });
+  });
+
   describe('with custom config', () => {
     it('applies the custom SVGO config', () => {
       const input =
@@ -81,6 +110,15 @@ describe('optimizeSvg', () => {
 
       expect(output).not.toContain('<!-- comment -->');
       expect(output).toContain('<path');
+    });
+
+    it('uses the custom config in place of the baseline, without merging', () => {
+      const input =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>My Icon</title><path d="M0 0"/></svg>';
+      const output = optimizeSvg(input, { plugins: ['removeComments'] });
+
+      // The baseline removes <title>, so its presence shows the baseline did not run
+      expect(output).toContain('<title>My Icon</title>');
     });
   });
 });

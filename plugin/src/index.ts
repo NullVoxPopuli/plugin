@@ -77,3 +77,4 @@ export const SvgJarPlugin: UnpluginInstance<SvgJarOptions | undefined, false> = 
 });
 
 export type { SvgJarOptions, SvgJarTarget } from './core/options.ts';
+export { baselineSvgoConfig } from './svg/optimize.ts';

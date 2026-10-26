@@ -126,10 +126,10 @@ svgJar({
   // Default: 'dom'
   target: 'dom' | 'ember' | 'react' | 'preact' | 'vue' | 'solid' | 'web-component',
 
-  // SVGO configuration.
-  // true (default): use baseline config with sensible defaults
+  // SVGO configuration. See "SVGO optimization" below.
+  // true (default): use the baseline config
   // false: disable optimization entirely
-  // object: custom SVGO config, deep-merged with baseline
+  // object: custom SVGO config, used in place of the baseline
   svgo: true,
 
   // Default sprite name for bare SVG imports.
@@ -416,6 +416,21 @@ SVGO runs per-SVG during the `load` phase (not on assembled sprites) to prevent 
 - Preserves path data and numeric values for visual fidelity
 
 Runs in both dev and prod so behaviour is consistent.
+
+A custom `svgo` config replaces the baseline config. svg-jar does not merge them. To keep the baseline and add plugins, copy the baseline plugins from `baselineSvgoConfig`:
+
+```ts
+import { baselineSvgoConfig } from '@svg-jar/plugin';
+import svgJar from '@svg-jar/plugin/vite';
+
+svgJar({
+  svgo: {
+    plugins: [...baselineSvgoConfig.plugins, 'removeDimensions'],
+  },
+});
+```
+
+If you write a config without the baseline, keep the `cleanupIds` override from it: `{ name: 'preset-default', params: { overrides: { cleanupIds: { minify: false, remove: false } } } }`. Without it, SVGO shortens IDs in each file to names like `a` and `b`. Icons from different files then use the same IDs in one sprite sheet, and a `url(#a)` reference can point to the gradient or clip path of a different icon.
 
 ### Embedded reference resolution
 
