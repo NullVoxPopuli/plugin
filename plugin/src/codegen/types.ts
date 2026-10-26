@@ -31,4 +31,6 @@ export interface CodegenContext {
   symbolMarkup: string;
   /** Markup for `<symbol>` entries referenced via `<use>` (for dev sprite mode). */
   refSymbols: string[];
+  /** Attributes from the root `<svg>` to set on the rendered `<svg>`, or `null` if none. */
+  rootAttrs: Record<string, string> | null;
 }

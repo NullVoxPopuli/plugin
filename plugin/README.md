@@ -140,6 +140,26 @@ svgJar({
   // Default: false
   currentColor: false,
 
+  // Attributes copied from the root <svg> of each source file to the <svg>
+  // that the runtime renders. See "Root attributes" below.
+  // Default: the list below. A list given here replaces the default list.
+  rootAttributes: [
+    'fill',
+    'fill-opacity',
+    'fill-rule',
+    'stroke',
+    'stroke-width',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'stroke-opacity',
+    'clip-rule',
+    'opacity',
+    'color',
+  ],
+
   // Sprite sheets to inline into the HTML document rather than emit as
   // external files. See "Embedded sprites" below.
   // true: embed all sprites  |  string[]: embed named sprites  |  false (default): external files
@@ -167,6 +187,28 @@ These can be combined with any import mode:
 // This icon inherits color from its parent's CSS color property
 import Icon from './icons/icon.svg?current-color';
 ```
+
+### Root attributes
+
+Many icon sets put presentation attributes on the root `<svg>` and leave them off the children. Heroicons outline icons look like this:
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/>
+</svg>
+```
+
+svg-jar does not keep the root `<svg>` of the source file. The runtime renders its own `<svg>`, and in sprite mode the children move into a `<symbol>`. So svg-jar copies the attributes in `rootAttributes` from the source root to the rendered `<svg>`, and the children inherit them as before.
+
+Attributes you pass to the component, and CSS rules on the rendered `<svg>`, override the copied values. For example, `<ChevronUp stroke-width="2" />` or a Tailwind class like `stroke-2` gives a thicker stroke.
+
+The default list is:
+
+`fill`, `fill-opacity`, `fill-rule`, `stroke`, `stroke-width`, `stroke-linecap`, `stroke-linejoin`, `stroke-miterlimit`, `stroke-dasharray`, `stroke-dashoffset`, `stroke-opacity`, `clip-rule`, `opacity`, `color`
+
+A list in `rootAttributes` replaces the default list. It can name any attribute, such as `aria-hidden`. An empty list copies nothing.
+
+When `currentColor` is on, the root `fill` and `stroke` are replaced in the same way as on the children.
 
 ## Targets
 
@@ -351,7 +393,7 @@ The `?file` query always exports a `string` URL regardless of target, so no cust
 ### Build mode
 
 1. **`resolveId`** <br> Intercepts `.svg` imports and parses query strings
-2. **`load`** <br> Reads the SVG, optimizes with SVGO, parses via [@eksml/xml](https://github.com/evoactivity/eksml), applies transforms (currentColor, strip dimensions), resolves embedded `<use>` and `<image>` references, registers symbols in the sprite registry
+2. **`load`** <br> Reads the SVG, optimizes with SVGO, parses via [@eksml/xml](https://github.com/evoactivity/eksml), applies transforms (currentColor, strip dimensions), reads the root attributes, resolves embedded `<use>` and `<image>` references, registers symbols in the sprite registry
 3. **`transform`** <br> Generates framework-specific component code with a sprite placeholder URL
 4. **`renderChunk`** <br> Replaces placeholders with final sprite URLs, tracks which symbols are actually used (tree-shaking)
 5. **`generateBundle`** <br> Assembles sprite sheets from used symbols only, resolves embedded refs to final asset URLs, emits sprite and file assets

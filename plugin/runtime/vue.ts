@@ -11,6 +11,7 @@ import { h, markRaw, type VNode, type VNodeArrayChildren } from 'vue';
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Vue component.
  */
 export const createSvg: (
@@ -18,11 +19,12 @@ export const createSvg: (
   width: string | null,
   height: string | null,
   href: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href, rootAttrs) => {
   return markRaw({
     inheritAttrs: false,
     render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => VNode[] } }) {
-      const attrs = { viewBox, width, height, ...this.$attrs };
+      const attrs = { viewBox, width, height, ...rootAttrs, ...this.$attrs };
       const children: VNodeArrayChildren = [...(this.$slots.default?.() ?? []), h('use', { href })];
       return h('svg', attrs, children);
     },
@@ -41,6 +43,7 @@ export const createSvg: (
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param xml     The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Vue component.
  */
 export const createSvgInline: (
@@ -48,11 +51,12 @@ export const createSvgInline: (
   width: string | null,
   height: string | null,
   xml: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml, rootAttrs) => {
   return markRaw({
     inheritAttrs: false,
     render(this: { $attrs: Record<string, unknown>; $slots: { default?: () => VNode[] } }) {
-      const attrs = { viewBox, width, height, ...this.$attrs };
+      const attrs = { viewBox, width, height, ...rootAttrs, ...this.$attrs };
       const children: VNodeArrayChildren = [...(this.$slots.default?.() ?? []), h('g', { innerHTML: xml })];
       return h('svg', attrs, children);
     },

@@ -12,11 +12,13 @@ import { RUNTIME_PATHS, makePlaceholder } from '../core/constants.ts';
  * is unused, the bundler eliminates it, and the symbol is excluded from
  * the sprite.
  *
- * @param target   Framework target.
- * @param symbolId Deterministic hash for the placeholder.
- * @param viewBox  The `viewBox` attribute value.
- * @param width    The `width` attribute value.
- * @param height   The `height` attribute value.
+ * @param target     Framework target.
+ * @param symbolId   Deterministic hash for the placeholder.
+ * @param viewBox    The `viewBox` attribute value.
+ * @param width      The `width` attribute value.
+ * @param height     The `height` attribute value.
+ * @param isEmbedded Whether the sprite is inlined in the HTML document.
+ * @param rootAttrs  Attributes for the rendered `<svg>`, or `null` if none.
  *
  * @example
  *   generateProd('dom', 'abc123', '0 0 24 24', '24', '24')
@@ -29,6 +31,7 @@ export function generateProd(
   width: string | null,
   height: string | null,
   isEmbedded = false,
+  rootAttrs: Record<string, string> | null = null,
 ): string {
   const runtimePath = RUNTIME_PATHS[target];
 
@@ -40,6 +43,6 @@ export function generateProd(
 
   return [
     `import { createSvg } from '${runtimePath}';`,
-    `export default /*#__PURE__*/ createSvg(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${href});`,
+    `export default /*#__PURE__*/ createSvg(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${href}, ${JSON.stringify(rootAttrs)});`,
   ].join('\n');
 }

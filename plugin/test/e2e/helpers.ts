@@ -58,6 +58,47 @@ export async function expectChildrenSupport(page: Page, titleText: string): Prom
   await expect(title.first()).toHaveText(titleText);
 }
 
+/**
+ * Checks that the root attributes from chevron-up.svg (a Heroicons outline
+ * icon) are set on the rendered `<svg>` and take effect.
+ *
+ * @param svgSelector Selector for the rendered `<svg>` element.
+ */
+export async function expectRootAttrs(page: Page, svgSelector: string): Promise<void> {
+  const svg = page.locator(svgSelector).first();
+  await expect(svg).toHaveAttribute('fill', 'none');
+  await expect(svg).toHaveAttribute('stroke', 'currentColor');
+  await expect(svg).toHaveAttribute('stroke-width', '1.5');
+  await expect(svg).toHaveCSS('fill', 'none');
+  await expect(svg).toHaveCSS('stroke-width', '1.5px');
+}
+
+/**
+ * Checks that a `stroke-width` of 3 passed by the caller wins over the
+ * `stroke-width` of 1.5 from the root of chevron-up.svg.
+ *
+ * @param svgSelector Selector for the rendered `<svg>` element.
+ */
+export async function expectRootAttrOverride(page: Page, svgSelector: string): Promise<void> {
+  const svg = page.locator(svgSelector).first();
+  await expect(svg).toHaveAttribute('stroke-width', '3');
+  await expect(svg).toHaveCSS('stroke-width', '3px');
+  await expect(svg).toHaveAttribute('fill', 'none');
+}
+
+/**
+ * Checks that the children of an inline `<svg>` inherit the root attributes.
+ * Sprite icons render their children in a `<use>` shadow tree, which
+ * Playwright cannot query, so this only applies to inline icons.
+ *
+ * @param svgSelector Selector for the rendered `<svg>` element.
+ */
+export async function expectInlineChildrenInheritRootAttrs(page: Page, svgSelector: string): Promise<void> {
+  const path = page.locator(`${svgSelector} path`).first();
+  await expect(path).toHaveCSS('fill', 'none');
+  await expect(path).toHaveCSS('stroke-width', '1.5px');
+}
+
 // -- Build output assertions --
 
 export function expectDefaultSprite(assets: string): void {

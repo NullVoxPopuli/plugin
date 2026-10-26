@@ -4,7 +4,7 @@ import type { UnpluginBuildContext, UnpluginContext } from 'unplugin';
 import type { PluginState } from '../core/state.ts';
 import { parseSvgId, isSvgId, parseSvgDtsId } from '../core/query.ts';
 import { generateDts } from '../codegen/dts.ts';
-import { parseSvg, hashSvg } from '../svg/parse.ts';
+import { parseSvg, hashSvg, findRootAttrs } from '../svg/parse.ts';
 import { optimizeSvg } from '../svg/optimize.ts';
 import { applyCurrentColor, stripDimensions, findEmbeddedRefs } from '../svg/transform.ts';
 import { createSymbol, serializeSvg, serializeSvgInner } from '../svg/serialize.ts';
@@ -35,7 +35,8 @@ function hasResolve(ctx: unknown): ctx is ResolveContext {
  *   2. Generates a deterministic symbol ID from the raw content hash.
  *   3. Optimizes the SVG with SVGO (inlines CSS, strips titles, etc.).
  *   4. Re-parses the optimized SVG via eksml lossless format.
- *   5. Applies transforms (currentColor, strip dimensions).
+ *   5. Applies transforms (currentColor, strip dimensions) and reads the
+ *      root attributes that the runtime sets on the rendered `<svg>`.
  *   6. Resolves embedded references (`<use href>`, `<image href>`) via
  *      the bundler's `this.resolve()` (Rollup/Vite only).
  *   7. For sprite mode: creates a `<symbol>` and registers it in the registry.
@@ -79,6 +80,9 @@ export function createLoadHook(
 
     // Strip width/height from the root <svg> so SVGs scale to their container
     stripDimensions(data.entries);
+
+    // Read after applyCurrentColor so root fill/stroke include its changes
+    const rootAttrs = findRootAttrs(data.entries, state.options.rootAttributes);
 
     // Resolve embedded references (<use href="other.svg">, <image href="photo.png">).
     // Only available under Rollup/Vite where `this.resolve()` exists.
@@ -151,6 +155,7 @@ export function createLoadHook(
       spriteName,
       currentColor: parsed.currentColor,
       data,
+      rootAttrs,
       svgMarkup,
       svgSource,
       useRefs,

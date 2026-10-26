@@ -13,6 +13,7 @@ import { RUNTIME_PATHS } from '../core/constants.ts';
  * @param width     The `width` attribute value.
  * @param height    The `height` attribute value.
  * @param svgMarkup The full SVG markup string.
+ * @param rootAttrs Attributes for the rendered `<svg>`, or `null` if none.
  *
  * @example
  *   generateDev('dom', '0 0 24 24', '24', '24', '<svg>...</svg>')
@@ -24,12 +25,13 @@ export function generateDev(
   width: string | null,
   height: string | null,
   svgMarkup: string,
+  rootAttrs: Record<string, string> | null = null,
 ): string {
   const runtimePath = RUNTIME_PATHS[target];
 
   return [
     `import { createSvgInline } from '${runtimePath}';`,
-    `export default /*#__PURE__*/ createSvgInline(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${JSON.stringify(svgMarkup)});`,
+    `export default /*#__PURE__*/ createSvgInline(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${JSON.stringify(svgMarkup)}, ${JSON.stringify(rootAttrs)});`,
   ].join('\n');
 }
 
@@ -50,6 +52,7 @@ export function generateDev(
  * @param symbolMarkup   The SVG content as a `<symbol>` element string.
  * @param symbolId       The symbol ID for the `<use href>` reference.
  * @param refSymbols     Markup for referenced `<symbol>` entries to embed.
+ * @param rootAttrs      Attributes for the rendered `<svg>`, or `null` if none.
  *
  * @example
  *   generateDevSprite('dom', '0 0 24 24', null, null, '<symbol id="a">...</symbol>', 'a', ['<symbol id="b">...</symbol>'])
@@ -62,6 +65,7 @@ export function generateDevSprite(
   symbolMarkup: string,
   symbolId: string,
   refSymbols: string[],
+  rootAttrs: Record<string, string> | null = null,
 ): string {
   const runtimePath = RUNTIME_PATHS[target];
 
@@ -71,6 +75,6 @@ export function generateDevSprite(
 
   return [
     `import { createSvgInline } from '${runtimePath}';`,
-    `export default /*#__PURE__*/ createSvgInline(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${JSON.stringify(inner)});`,
+    `export default /*#__PURE__*/ createSvgInline(${JSON.stringify(viewBox)}, ${JSON.stringify(width)}, ${JSON.stringify(height)}, ${JSON.stringify(inner)}, ${JSON.stringify(rootAttrs)});`,
   ].join('\n');
 }

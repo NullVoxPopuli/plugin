@@ -4,6 +4,16 @@ import { insert, spread, template } from 'solid-js/web';
 type SvgProps = ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>;
 
 /**
+ * Sets the root attributes of the source file on the rendered `<svg>`.
+ * Called before `spread` so the caller's props win.
+ */
+function applyRootAttrs(el: SVGSVGElement, rootAttrs: Record<string, string> | null | undefined): void {
+  for (const [key, value] of Object.entries(rootAttrs ?? {})) {
+    el.setAttribute(key, value);
+  }
+}
+
+/**
  * Creates a Solid component that renders an SVG sprite symbol via `<use href>`.
  * Used in production builds where SVGs are collected into sprite sheets.
  *
@@ -14,6 +24,7 @@ type SvgProps = ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>;
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Solid component.
  */
 export const createSvg: (
@@ -21,7 +32,8 @@ export const createSvg: (
   width: string | null,
   height: string | null,
   href: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href, rootAttrs) => {
   const tmpl = template(
     `<svg${viewBox ? ` viewBox="${viewBox}"` : ''}${width ? ` width="${width}"` : ''}${height ? ` height="${height}"` : ''}><use href="${href}">`,
   );
@@ -31,6 +43,7 @@ export const createSvg: (
     if (!(el instanceof SVGSVGElement)) {
       throw new Error('svg-jar: the SVG template did not produce an <svg> element');
     }
+    applyRootAttrs(el, rootAttrs);
     const [local, rest] = splitProps(props, ['children']);
     spread(el, rest, true, true);
 
@@ -55,6 +68,7 @@ export const createSvg: (
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param xml     The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Solid component.
  */
 export const createSvgInline: (
@@ -62,7 +76,8 @@ export const createSvgInline: (
   width: string | null,
   height: string | null,
   xml: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml, rootAttrs) => {
   const tmpl = template(
     `<svg${viewBox ? ` viewBox="${viewBox}"` : ''}${width ? ` width="${width}"` : ''}${height ? ` height="${height}"` : ''}>`,
   );
@@ -72,6 +87,7 @@ export const createSvgInline: (
     if (!(el instanceof SVGSVGElement)) {
       throw new Error('svg-jar: the SVG template did not produce an <svg> element');
     }
+    applyRootAttrs(el, rootAttrs);
     const [local, rest] = splitProps(props, ['children']);
     spread(el, rest, true, true);
 

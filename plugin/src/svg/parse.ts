@@ -65,6 +65,35 @@ function findRootSvgAttrs(entries: LosslessEntry[]): Record<string, string | nul
 }
 
 /**
+ * Reads the named attributes from the root `<svg>` element.
+ *
+ * Run this after any transform that changes root attributes (such as
+ * `applyCurrentColor`) so the result includes those changes.
+ *
+ * @param entries Lossless SVG entries.
+ * @param names   Attribute names to read.
+ * @returns       The attributes found, in source order, or `null` if none.
+ *
+ * @example
+ *   const data = parseSvg('<svg fill="none" stroke="red" viewBox="0 0 24 24">...</svg>');
+ *   findRootAttrs(data.entries, ['stroke', 'fill']);
+ *   // → { fill: 'none', stroke: 'red' }
+ */
+export function findRootAttrs(entries: LosslessEntry[], names: readonly string[]): Record<string, string> | null {
+  const attrs = findRootSvgAttrs(entries);
+  if (!attrs) return null;
+
+  const found: Record<string, string> = {};
+  for (const [name, value] of Object.entries(attrs)) {
+    if (typeof value === 'string' && names.includes(name)) {
+      found[name] = value;
+    }
+  }
+
+  return Object.keys(found).length > 0 ? found : null;
+}
+
+/**
  * Generates a deterministic symbol ID from SVG content by hashing
  * the source string. Returns an 8-character hex string.
  *

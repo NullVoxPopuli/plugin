@@ -49,6 +49,17 @@ function applyOptions(svg: SVGSVGElement, options: SvgOptions): void {
 }
 
 /**
+ * Sets the root attributes of the source file on the rendered `<svg>`.
+ * Called before `applyOptions` so the caller's attributes win.
+ */
+function applyRootAttrs(svg: SVGSVGElement, rootAttrs: Record<string, string> | null): void {
+  if (!rootAttrs) return;
+  for (const [key, value] of Object.entries(rootAttrs)) {
+    svg.setAttribute(key, value);
+  }
+}
+
+/**
  * Returns a factory function that creates an SVG element referencing a
  * sprite symbol via `<use href>`. Each call to the factory produces a
  * new DOM node, so the same import can be inserted into the document
@@ -62,6 +73,7 @@ function applyOptions(svg: SVGSVGElement, options: SvgOptions): void {
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A factory function that creates a new SVG DOM element on each call.
  *
  * @example
@@ -74,6 +86,7 @@ export function createSvg(
   width: string | null,
   height: string | null,
   href: string,
+  rootAttrs: Record<string, string> | null = null,
 ): (options?: SvgOptions) => SVGSVGElement {
   return (options?: SvgOptions) => {
     const svg = document.createElementNS(SVG_NS, 'svg');
@@ -81,6 +94,7 @@ export function createSvg(
     if (viewBox) svg.setAttribute('viewBox', viewBox);
     if (width) svg.setAttribute('width', width);
     if (height) svg.setAttribute('height', height);
+    applyRootAttrs(svg, rootAttrs);
 
     const use = document.createElementNS(SVG_NS, 'use');
     use.setAttributeNS(XLINK_NS, 'xlink:href', href);
@@ -105,6 +119,7 @@ export function createSvg(
  * @param width     The `width` attribute.
  * @param height    The `height` attribute.
  * @param svgMarkup The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns         A factory function that creates a new SVG DOM element on each call.
  *
  * @example
@@ -117,6 +132,7 @@ export function createSvgInline(
   width: string | null,
   height: string | null,
   svgMarkup: string,
+  rootAttrs: Record<string, string> | null = null,
 ): (options?: SvgOptions) => SVGSVGElement {
   return (options?: SvgOptions) => {
     const svg = document.createElementNS(SVG_NS, 'svg');
@@ -124,6 +140,7 @@ export function createSvgInline(
     if (viewBox) svg.setAttribute('viewBox', viewBox);
     if (width) svg.setAttribute('width', width);
     if (height) svg.setAttribute('height', height);
+    applyRootAttrs(svg, rootAttrs);
 
     svg.innerHTML = svgMarkup;
 

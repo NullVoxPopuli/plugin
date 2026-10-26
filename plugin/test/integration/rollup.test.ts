@@ -214,6 +214,66 @@ describe('Rollup integration', () => {
     });
   });
 
+  describe('root attributes', () => {
+    const ENTRY_ROOT_ATTRS = path.join(FIXTURES_DIR, 'entry-root-attrs.js');
+    const HEROICON_ATTRS = { fill: 'none', 'stroke-width': '1.5', stroke: 'currentColor' };
+
+    function chunkCode(result: RollupOutput): string {
+      const chunk = result.output.find((o) => o.type === 'chunk');
+      if (chunk?.type !== 'chunk') throw new Error('No chunk in output');
+      return chunk.code;
+    }
+
+    /**
+     * Returns the root attributes object passed as the last argument of the
+     * first call to `fn`. SVGO sorts attributes, so tests compare objects
+     * rather than strings.
+     */
+    function rootAttrsArg(code: string, fn: string): unknown {
+      const line = code.split('\n').find((l) => l.includes(`${fn}(`));
+      const match = line === undefined ? null : /, (\{[^}]*\}|null)\);$/.exec(line);
+      if (!match) throw new Error(`No ${fn} call with a root attributes argument`);
+      return JSON.parse(match[1]);
+    }
+
+    it('passes the root attributes to createSvg for sprite imports', async () => {
+      const code = chunkCode(await build({ target: 'dom' }, ENTRY_ROOT_ATTRS));
+
+      expect(rootAttrsArg(code, 'createSvg')).toEqual(HEROICON_ATTRS);
+    });
+
+    it('passes the root attributes to createSvgInline for inline imports', async () => {
+      const code = chunkCode(await build({ target: 'dom' }, ENTRY_ROOT_ATTRS));
+
+      expect(rootAttrsArg(code, 'createSvgInline')).toEqual(HEROICON_ATTRS);
+    });
+
+    it('leaves the sprite symbol without the root attributes', async () => {
+      const result = await build({ target: 'dom' }, ENTRY_ROOT_ATTRS);
+      const sprite = result.output.find(
+        (o) => o.type === 'asset' && o.fileName.startsWith('assets/sprite-') && o.fileName.endsWith('.svg'),
+      );
+      if (sprite?.type !== 'asset' || typeof sprite.source !== 'string') throw new Error('No sprite asset');
+
+      expect(sprite.source).toMatch(/<symbol id="[a-f0-9]+" viewBox="0 0 24 24">/);
+    });
+
+    it('uses the rootAttributes option in place of the default list', async () => {
+      const code = chunkCode(await build({ target: 'dom', rootAttributes: ['stroke-width'] }, ENTRY_ROOT_ATTRS));
+
+      expect(rootAttrsArg(code, 'createSvg')).toEqual({ 'stroke-width': '1.5' });
+      expect(rootAttrsArg(code, 'createSvgInline')).toEqual({ 'stroke-width': '1.5' });
+    });
+
+    it('passes aria-hidden and data-slot when the user list names them', async () => {
+      const code = chunkCode(
+        await build({ target: 'dom', rootAttributes: ['aria-hidden', 'data-slot'] }, ENTRY_ROOT_ATTRS),
+      );
+
+      expect(rootAttrsArg(code, 'createSvg')).toEqual({ 'aria-hidden': 'true', 'data-slot': 'icon' });
+    });
+  });
+
   describe('currentColor', () => {
     it('applies currentColor when enabled globally', async () => {
       const result = await build({ target: 'dom', currentColor: true });

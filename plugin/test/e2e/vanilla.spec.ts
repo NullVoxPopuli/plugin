@@ -15,6 +15,9 @@ import {
   expectNamedSpriteContainsCircle,
   expectChunkContainsSpriteRefs,
   expectChunkContainsInlineMarkup,
+  expectRootAttrs,
+  expectInlineChildrenInheritRootAttrs,
+  expectRootAttrOverride,
 } from './helpers.ts';
 
 function readDistFile(projectName: string, fileName: string): string {
@@ -80,6 +83,29 @@ test.describe('Vanilla DOM', () => {
     await expect(img).toBeAttached();
     const src = await img.getAttribute('src');
     expect(src).toMatch(/\.svg/);
+  });
+
+  // -- Root attributes --
+
+  test('sprite <svg> gets the root attributes', async ({ page }) => {
+    await expectRootAttrs(page, 'svg.hero-sprite');
+  });
+
+  test('inline <svg> gets the root attributes', async ({ page }) => {
+    await expectRootAttrs(page, 'svg.hero-inline');
+    await expectInlineChildrenInheritRootAttrs(page, 'svg.hero-inline');
+  });
+
+  test('caller attribute overrides a root attribute on a sprite <svg>', async ({ page }) => {
+    await expectRootAttrOverride(page, 'svg.hero-sprite-override');
+  });
+
+  test('caller attribute overrides a root attribute on an inline <svg>', async ({ page }) => {
+    await expectRootAttrOverride(page, 'svg.hero-inline-override');
+  });
+
+  test('CSS rule overrides a root attribute on a sprite <svg>', async ({ page }) => {
+    await expect(page.locator('svg.hero-css-override')).toHaveCSS('stroke-width', '3px');
   });
 
   // -- Visual regression --

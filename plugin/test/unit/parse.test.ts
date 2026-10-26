@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it, expect } from 'vitest';
-import { parseSvg, hashSvg } from '../../src/svg/parse.ts';
+import { parseSvg, hashSvg, findRootAttrs } from '../../src/svg/parse.ts';
+import { applyCurrentColor } from '../../src/svg/transform.ts';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, '..', '_fixtures');
 
@@ -64,6 +65,72 @@ describe('parseSvg', () => {
 
     expect(data.viewBox).toBe('0 0 16 16');
     expect(data.width).toBeNull();
+  });
+});
+
+describe('findRootAttrs', () => {
+  const NAMES = ['fill', 'stroke', 'stroke-width', 'stroke-linecap', 'opacity'];
+
+  it('returns the listed attributes found on the root <svg>', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+
+    expect(findRootAttrs(data.entries, NAMES)).toEqual({
+      fill: 'none',
+      'stroke-width': '1.5',
+      stroke: 'currentColor',
+    });
+  });
+
+  it('leaves out attributes that are not in the list', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+    const attrs = findRootAttrs(data.entries, NAMES);
+
+    expect(attrs).not.toHaveProperty('xmlns');
+    expect(attrs).not.toHaveProperty('viewBox');
+    expect(attrs).not.toHaveProperty('aria-hidden');
+    expect(attrs).not.toHaveProperty('data-slot');
+  });
+
+  it('ignores listed attributes that only appear on child elements', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+    const attrs = findRootAttrs(data.entries, NAMES);
+
+    // stroke-linecap is set on the <path>, not the root
+    expect(attrs).not.toHaveProperty('stroke-linecap');
+  });
+
+  it('returns only the attributes in a custom list', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+
+    expect(findRootAttrs(data.entries, ['stroke-width'])).toEqual({ 'stroke-width': '1.5' });
+  });
+
+  it('returns attributes that are not presentation attributes when the list names them', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+
+    expect(findRootAttrs(data.entries, ['aria-hidden', 'data-slot'])).toEqual({
+      'aria-hidden': 'true',
+      'data-slot': 'icon',
+    });
+  });
+
+  it('returns null when the list is empty', () => {
+    const data = parseSvg(readFixture('heroicon-outline.svg'));
+
+    expect(findRootAttrs(data.entries, [])).toBeNull();
+  });
+
+  it('returns null when the root has none of the listed attributes', () => {
+    const data = parseSvg(readFixture('simple.svg'));
+
+    expect(findRootAttrs(data.entries, NAMES)).toBeNull();
+  });
+
+  it('reflects the currentColor replacement when run after applyCurrentColor', () => {
+    const data = parseSvg('<svg viewBox="0 0 24 24" fill="none" stroke="#333"><path d="M0 0"/></svg>');
+    applyCurrentColor(data.entries);
+
+    expect(findRootAttrs(data.entries, NAMES)).toEqual({ fill: 'none', stroke: 'currentColor' });
   });
 });
 

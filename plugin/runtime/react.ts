@@ -3,6 +3,20 @@
 import { createElement, useCallback } from 'react';
 
 /**
+ * Converts attribute names to the camelCase prop names React expects,
+ * e.g. `stroke-width` to `strokeWidth`. React keeps `aria-*` and `data-*`
+ * hyphenated.
+ */
+function toReactProps(rootAttrs: Record<string, string> | null | undefined): Record<string, string> {
+  const props: Record<string, string> = {};
+  for (const [key, value] of Object.entries(rootAttrs ?? {})) {
+    const name = /^(aria|data)-/.test(key) ? key : key.replace(/[-:]([a-z])/g, (_, c: string) => c.toUpperCase());
+    props[name] = value;
+  }
+  return props;
+}
+
+/**
  * Creates a React component that renders an SVG sprite symbol via `<use href>`.
  * Used in production builds where SVGs are collected into sprite sheets.
  *
@@ -13,6 +27,7 @@ import { createElement, useCallback } from 'react';
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A React function component.
  */
 export const createSvg: (
@@ -20,14 +35,22 @@ export const createSvg: (
   width: string | null,
   height: string | null,
   href: string,
-) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href) => {
+  rootAttrs?: Record<string, string> | null,
+) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (
+  viewBox,
+  width,
+  height,
+  href,
+  rootAttrs,
+) => {
   const useEl = createElement('use', { href });
+  const rootProps = toReactProps(rootAttrs);
 
   return (props: unknown) => {
     const { children, ...rest } = props as Record<string, unknown>;
     return createElement(
       'svg',
-      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rest },
+      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rootProps, ...rest },
       children,
       useEl,
     );
@@ -46,6 +69,7 @@ export const createSvg: (
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param xml     The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A React function component.
  */
 export const createSvgInline: (
@@ -53,7 +77,16 @@ export const createSvgInline: (
   width: string | null,
   height: string | null,
   xml: string,
-) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml) => {
+  rootAttrs?: Record<string, string> | null,
+) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (
+  viewBox,
+  width,
+  height,
+  xml,
+  rootAttrs,
+) => {
+  const rootProps = toReactProps(rootAttrs);
+
   return (props: unknown) => {
     const { children, ...rest } = props as Record<string, unknown>;
     const setMarkup = useCallback((node: SVGGElement | null) => {
@@ -62,7 +95,7 @@ export const createSvgInline: (
 
     return createElement(
       'svg',
-      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rest },
+      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rootProps, ...rest },
       children,
       createElement('g', { ref: setMarkup }),
     );

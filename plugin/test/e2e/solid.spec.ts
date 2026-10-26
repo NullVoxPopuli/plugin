@@ -13,6 +13,9 @@ import {
   expectChunkContainsSpriteRefs,
   expectChunkContainsInlineMarkup,
   expectChunkContainsChildren,
+  expectRootAttrs,
+  expectInlineChildrenInheritRootAttrs,
+  expectRootAttrOverride,
 } from './helpers.ts';
 
 const ASSETS = assetsDir('solid');
@@ -44,6 +47,25 @@ test.describe('Solid', () => {
 
   test('class attribute', async ({ page }) => {
     await expect(page.locator('svg.icon').first()).toBeAttached();
+  });
+
+  // -- Root attributes --
+
+  test('sprite <svg> gets the root attributes', async ({ page }) => {
+    await expectRootAttrs(page, 'svg.hero-sprite');
+  });
+
+  test('inline <svg> gets the root attributes', async ({ page }) => {
+    await expectRootAttrs(page, 'svg.hero-inline');
+    await expectInlineChildrenInheritRootAttrs(page, 'svg.hero-inline');
+  });
+
+  test('caller attribute overrides a root attribute on a sprite <svg>', async ({ page }) => {
+    await expectRootAttrOverride(page, 'svg.hero-sprite-override');
+  });
+
+  test('caller attribute overrides a root attribute on an inline <svg>', async ({ page }) => {
+    await expectRootAttrOverride(page, 'svg.hero-inline-override');
   });
 
   // -- Visual regression --
