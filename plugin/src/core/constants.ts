@@ -12,6 +12,27 @@ export const RUNTIME_PATHS = {
 } as const;
 
 /**
+ * Root `<svg>` attributes passed to the rendered `<svg>` by default.
+ * These are presentation attributes that the children of the root inherit.
+ */
+export const DEFAULT_ROOT_ATTRIBUTES: readonly string[] = [
+  'fill',
+  'fill-opacity',
+  'fill-rule',
+  'stroke',
+  'stroke-width',
+  'stroke-linecap',
+  'stroke-linejoin',
+  'stroke-miterlimit',
+  'stroke-dasharray',
+  'stroke-dashoffset',
+  'stroke-opacity',
+  'clip-rule',
+  'opacity',
+  'color',
+];
+
+/**
  * Placeholder prefix inserted into generated JS during the `transform` hook.
  * Resolved to final sprite URLs during `renderChunk`.
  */

@@ -48,6 +48,8 @@ export interface SvgModule {
   currentColor: boolean | undefined;
   /** Parsed SVG metadata and lossless entries. */
   data: SvgData;
+  /** Attributes from the root `<svg>` to set on the rendered `<svg>`, or `null` if none. */
+  rootAttrs: Record<string, string> | null;
   /** Inner SVG content (children of `<svg>`, no root wrapper). Used by codegen. */
   svgMarkup: string;
   /** Full SVG document string (with root `<svg>`). Used for file asset emission. */

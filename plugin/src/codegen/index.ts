@@ -24,7 +24,7 @@ export function generateCode(ctx: CodegenContext): string {
 
   if (ctx.mode === 'inline') {
     // Inline mode embeds the full SVG markup in both dev and prod.
-    return generateDev(ctx.target, ctx.viewBox, ctx.width, ctx.height, ctx.svgMarkup);
+    return generateDev(ctx.target, ctx.viewBox, ctx.width, ctx.height, ctx.svgMarkup, ctx.rootAttrs);
   }
 
   if (ctx.isDev) {
@@ -39,10 +39,11 @@ export function generateCode(ctx: CodegenContext): string {
       ctx.symbolMarkup,
       ctx.symbolId,
       ctx.refSymbols,
+      ctx.rootAttrs,
     );
   }
 
   // Production sprite mode — embed a placeholder that renderChunk resolves,
   // or a local fragment ref for embedded sprites.
-  return generateProd(ctx.target, ctx.symbolId, ctx.viewBox, ctx.width, ctx.height, ctx.isEmbedded);
+  return generateProd(ctx.target, ctx.symbolId, ctx.viewBox, ctx.width, ctx.height, ctx.isEmbedded, ctx.rootAttrs);
 }

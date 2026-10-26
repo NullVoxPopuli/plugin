@@ -17,6 +17,7 @@ const XLINK_NS = 'http://www.w3.org/1999/xlink';
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A custom element class extending HTMLElement.
  */
 export function createSvg(
@@ -24,6 +25,7 @@ export function createSvg(
   width: string | null,
   height: string | null,
   href: string,
+  rootAttrs: Record<string, string> | null = null,
 ): typeof HTMLElement {
   return class extends HTMLElement {
     connectedCallback(): void {
@@ -33,6 +35,9 @@ export function createSvg(
       if (viewBox) svg.setAttribute('viewBox', viewBox);
       if (width) svg.setAttribute('width', width);
       if (height) svg.setAttribute('height', height);
+      for (const [key, value] of Object.entries(rootAttrs ?? {})) {
+        svg.setAttribute(key, value);
+      }
 
       // Move any light DOM children (title, desc) into the SVG
       while (this.firstChild) {
@@ -58,6 +63,7 @@ export function createSvg(
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param xml     The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A custom element class extending HTMLElement.
  */
 export function createSvgInline(
@@ -65,6 +71,7 @@ export function createSvgInline(
   width: string | null,
   height: string | null,
   xml: string,
+  rootAttrs: Record<string, string> | null = null,
 ): typeof HTMLElement {
   return class extends HTMLElement {
     connectedCallback(): void {
@@ -74,6 +81,9 @@ export function createSvgInline(
       if (viewBox) svg.setAttribute('viewBox', viewBox);
       if (width) svg.setAttribute('width', width);
       if (height) svg.setAttribute('height', height);
+      for (const [key, value] of Object.entries(rootAttrs ?? {})) {
+        svg.setAttribute(key, value);
+      }
 
       // Move any light DOM children (title, desc) into the SVG
       while (this.firstChild) {

@@ -1,4 +1,5 @@
 import type { Config as SvgoConfig } from 'svgo';
+import { DEFAULT_ROOT_ATTRIBUTES } from './constants.ts';
 
 /** Supported framework targets for component generation. */
 export type SvgJarTarget = 'dom' | 'ember' | 'react' | 'preact' | 'vue' | 'solid' | 'web-component';
@@ -23,6 +24,21 @@ export interface SvgJarOptions {
 
   /** Replace non-`none` fill/stroke with `currentColor`. Default: `false`. */
   currentColor?: boolean;
+
+  /**
+   * Attributes to copy from the root `<svg>` of each source file to the
+   * `<svg>` that the runtime renders. Attributes passed by the caller,
+   * and CSS rules on the rendered `<svg>`, override them.
+   *
+   * The default list holds the presentation attributes that children
+   * inherit, such as `fill`, `stroke` and `stroke-width`. A list given
+   * here replaces the default list. An empty list copies nothing.
+   *
+   * @example
+   * // Also copy aria-hidden from each source file
+   * svgJar({ rootAttributes: ['fill', 'stroke', 'stroke-width', 'aria-hidden'] })
+   */
+  rootAttributes?: string[];
 
   /**
    * Sprite sheets to inline directly into the HTML document rather than
@@ -74,6 +90,7 @@ export interface ResolvedOptions {
   svgo: boolean | SvgoConfig;
   defaultSprite: string;
   currentColor: boolean;
+  rootAttributes: string[];
   embedded: boolean | string[];
   /** Normalized base path (trailing slash ensured), or undefined to use the bundler default. */
   base: string | undefined;
@@ -91,6 +108,7 @@ export function resolveOptions(options: SvgJarOptions = {}): ResolvedOptions {
     svgo: options.svgo ?? true,
     defaultSprite: options.defaultSprite ?? 'sprite',
     currentColor: options.currentColor ?? false,
+    rootAttributes: options.rootAttributes ?? [...DEFAULT_ROOT_ATTRIBUTES],
     embedded: options.embedded ?? false,
     base: options.base == null ? undefined : options.base.endsWith('/') ? options.base : `${options.base}/`,
   };

@@ -16,6 +16,7 @@ type SvgProps = JSX.SVGAttributes<SVGSVGElement> & {
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param href    The sprite symbol reference (e.g. `/assets/sprite.svg#abc123`).
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Preact function component.
  */
 export const createSvg: (
@@ -23,14 +24,15 @@ export const createSvg: (
   width: string | null,
   height: string | null,
   href: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href, rootAttrs) => {
   const useEl = h('use', { href });
 
   return (props: SvgProps) => {
     const { children, ...rest } = props;
     return h(
       'svg',
-      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rest },
+      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rootAttrs, ...rest },
       children,
       useEl,
     );
@@ -49,6 +51,7 @@ export const createSvg: (
  * @param width   The `width` attribute, or `null` to omit.
  * @param height  The `height` attribute, or `null` to omit.
  * @param xml     The inner SVG markup string.
+ * @param rootAttrs Attributes from the root of the source `<svg>`, or `null` if none.
  * @returns       A Preact function component.
  */
 export const createSvgInline: (
@@ -56,7 +59,8 @@ export const createSvgInline: (
   width: string | null,
   height: string | null,
   xml: string,
-) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml) => {
+  rootAttrs?: Record<string, string> | null,
+) => unknown = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml, rootAttrs) => {
   return (props: SvgProps) => {
     const { children, ...rest } = props;
     const setMarkup = useCallback((node: SVGGElement | null) => {
@@ -65,7 +69,7 @@ export const createSvgInline: (
 
     return h(
       'svg',
-      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rest },
+      { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rootAttrs, ...rest },
       children,
       h('g', { ref: setMarkup }),
     );

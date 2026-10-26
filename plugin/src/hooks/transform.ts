@@ -103,6 +103,7 @@ export function createTransformHook(
       svgMarkup: svgModule.svgMarkup,
       symbolMarkup,
       refSymbols,
+      rootAttrs: svgModule.rootAttrs,
     });
 
     return withEmptyMap(`${preamble}${generated}`);
