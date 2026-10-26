@@ -15,7 +15,11 @@ const BASE_CTX: CodegenContext = {
   svgMarkup: '<svg viewBox="0 0 24 24"><path d="M0 0"/></svg>',
   symbolMarkup: '<symbol id="abc12345" viewBox="0 0 24 24"><path d="M0 0"/></symbol>',
   refSymbols: [],
+  rootAttrs: null,
 };
+
+const ROOT_ATTRS = { fill: 'none', 'stroke-width': '1.5', stroke: 'currentColor' };
+const ROOT_ATTRS_JSON = JSON.stringify(ROOT_ATTRS);
 
 function ctx(overrides: Partial<CodegenContext>): CodegenContext {
   return { ...BASE_CTX, ...overrides };
@@ -59,6 +63,39 @@ describe('generateCode', () => {
       const code = generateCode(ctx({ viewBox: null, width: null, height: null }));
 
       expect(code).toContain('null');
+    });
+  });
+
+  describe('root presentation attributes', () => {
+    it('passes them as the last createSvg argument in production sprite mode', () => {
+      const code = generateCode(ctx({ rootAttrs: ROOT_ATTRS }));
+      const placeholder = makePlaceholder('abc12345');
+
+      expect(code).toContain(`"${placeholder}", ${ROOT_ATTRS_JSON});`);
+    });
+
+    it('passes them for embedded sprites', () => {
+      const code = generateCode(ctx({ isEmbedded: true, rootAttrs: ROOT_ATTRS }));
+
+      expect(code).toContain(`"#abc12345", ${ROOT_ATTRS_JSON});`);
+    });
+
+    it('passes them as the last createSvgInline argument in dev sprite mode', () => {
+      const code = generateCode(ctx({ isDev: true, rootAttrs: ROOT_ATTRS }));
+
+      expect(code).toContain(`<use href=\\"#abc12345\\"/>", ${ROOT_ATTRS_JSON});`);
+    });
+
+    it('passes them as the last createSvgInline argument in inline mode', () => {
+      const code = generateCode(ctx({ mode: 'inline', rootAttrs: ROOT_ATTRS }));
+
+      expect(code).toContain(`<path d=\\"M0 0\\"/></svg>", ${ROOT_ATTRS_JSON});`);
+    });
+
+    it('passes null when there are none', () => {
+      expect(generateCode(ctx({}))).toMatch(/createSvg\(.*, null\);$/m);
+      expect(generateCode(ctx({ isDev: true }))).toMatch(/createSvgInline\(.*, null\);$/m);
+      expect(generateCode(ctx({ mode: 'inline' }))).toMatch(/createSvgInline\(.*, null\);$/m);
     });
   });
 

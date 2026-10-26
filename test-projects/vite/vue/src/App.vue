@@ -7,6 +7,10 @@ import Circle from './icons/circle.svg?sprite=shapes';
 
 // Inline mode
 import Square from './icons/square.svg?unsafe-inline';
+
+// Root attributes - fill, stroke and stroke-width set only on the root <svg>
+import ChevronUp from './icons/chevron-up.svg';
+import ChevronUpInline from './icons/chevron-up.svg?unsafe-inline';
 </script>
 
 <template>
@@ -34,6 +38,14 @@ import Square from './icons/square.svg?unsafe-inline';
     <section>
       <h2>Inline mode</h2>
       <Square class="icon" :style="{ width: '48px', height: '48px', color: 'green' }" />
+    </section>
+
+    <section>
+      <h2>Root attributes</h2>
+      <ChevronUp class="hero-sprite" />
+      <ChevronUpInline class="hero-inline" />
+      <ChevronUp class="hero-sprite-override" stroke-width="3" />
+      <ChevronUpInline class="hero-inline-override" stroke-width="3" />
     </section>
   </div>
 </template>

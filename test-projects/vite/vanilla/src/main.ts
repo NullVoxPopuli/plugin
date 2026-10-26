@@ -20,6 +20,10 @@ import ImageRef from './icons/with-image-ref.svg';
 import ExternalImage from './icons/with-external-image.svg';
 import FontRef from './icons/with-font-ref.svg?sprite=fonts';
 
+// Root attributes - fill, stroke and stroke-width set only on the root <svg>
+import ChevronUp from './icons/chevron-up.svg';
+import ChevronUpInline from './icons/chevron-up.svg?unsafe-inline';
+
 // Source order - complex SVG with layered shapes, gradients, clip-paths, text
 import SourceOrder from './icons/source-order.svg';
 
@@ -60,6 +64,18 @@ app.appendChild(ImageRef());
 // External asset refs (absolute URLs - should remain unchanged in output)
 app.appendChild(ExternalImage());
 app.appendChild(FontRef());
+
+// Root attributes, then a caller stroke-width that must win over them
+app.appendChild(ChevronUp({ class: 'hero-sprite' }));
+app.appendChild(ChevronUpInline({ class: 'hero-inline' }));
+app.appendChild(ChevronUp({ class: 'hero-sprite-override', 'stroke-width': '3' }));
+app.appendChild(ChevronUpInline({ class: 'hero-inline-override', 'stroke-width': '3' }));
+
+// A CSS rule on the <svg> must also win over the root attributes
+const style = document.createElement('style');
+style.textContent = '.hero-css-override { stroke-width: 3; }';
+document.head.appendChild(style);
+app.appendChild(ChevronUp({ class: 'hero-css-override' }));
 
 // Source order - render at larger size to see detail
 const sourceOrderEl = SourceOrder();

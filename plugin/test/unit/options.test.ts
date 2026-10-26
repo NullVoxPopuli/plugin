@@ -32,6 +32,38 @@ describe('resolveOptions', () => {
     expect(resolved.svgo).toBe(svgoConfig);
   });
 
+  describe('rootAttributes', () => {
+    it('defaults to a list of inheritable presentation attributes', () => {
+      const resolved = resolveOptions();
+
+      expect(resolved.rootAttributes).toEqual(
+        expect.arrayContaining([
+          'fill',
+          'fill-rule',
+          'stroke',
+          'stroke-width',
+          'stroke-linecap',
+          'stroke-linejoin',
+          'clip-rule',
+          'opacity',
+          'color',
+        ]),
+      );
+    });
+
+    it('replaces the default list with the user list', () => {
+      const resolved = resolveOptions({ rootAttributes: ['stroke-width'] });
+
+      expect(resolved.rootAttributes).toEqual(['stroke-width']);
+    });
+
+    it('accepts an empty list', () => {
+      const resolved = resolveOptions({ rootAttributes: [] });
+
+      expect(resolved.rootAttributes).toEqual([]);
+    });
+  });
+
   describe('base', () => {
     it('defaults to undefined (bundler decides)', () => {
       expect(resolveOptions({}).base).toBeUndefined();

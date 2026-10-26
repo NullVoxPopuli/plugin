@@ -33,6 +33,10 @@ function assetPlugin(): Plugin {
   };
 }
 
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * Builds the test fixture with Rollup + svg-jar plugin and returns the output.
  */
@@ -211,6 +215,54 @@ describe('Rollup integration', () => {
         expect(sprite.source).toContain('https://example.com/fonts/custom.woff2');
         expect(sprite.source).toContain('@font-face');
       }
+    });
+  });
+
+  describe('root attributes', () => {
+    const ENTRY_ROOT_ATTRS = path.join(FIXTURES_DIR, 'entry-root-attrs.js');
+    const HEROICON_ATTRS = JSON.stringify({ fill: 'none', 'stroke-width': '1.5', stroke: 'currentColor' });
+
+    function chunkCode(result: RollupOutput): string {
+      const chunk = result.output.find((o) => o.type === 'chunk');
+      if (chunk?.type !== 'chunk') throw new Error('No chunk in output');
+      return chunk.code;
+    }
+
+    it('passes the root attributes to createSvg for sprite imports', async () => {
+      const code = chunkCode(await build({ target: 'dom' }, ENTRY_ROOT_ATTRS));
+
+      expect(code).toMatch(new RegExp(`createSvg\\(.*, ${escapeRegExp(HEROICON_ATTRS)}\\)`));
+    });
+
+    it('passes the root attributes to createSvgInline for inline imports', async () => {
+      const code = chunkCode(await build({ target: 'dom' }, ENTRY_ROOT_ATTRS));
+
+      expect(code).toMatch(new RegExp(`createSvgInline\\(.*, ${escapeRegExp(HEROICON_ATTRS)}\\)`));
+    });
+
+    it('leaves the sprite symbol without the root attributes', async () => {
+      const result = await build({ target: 'dom' }, ENTRY_ROOT_ATTRS);
+      const sprite = result.output.find(
+        (o) => o.type === 'asset' && o.fileName.startsWith('assets/sprite-') && o.fileName.endsWith('.svg'),
+      );
+      if (sprite?.type !== 'asset' || typeof sprite.source !== 'string') throw new Error('No sprite asset');
+
+      expect(sprite.source).toMatch(/<symbol id="[a-f0-9]+" viewBox="0 0 24 24">/);
+    });
+
+    it('uses the rootAttributes option in place of the default list', async () => {
+      const code = chunkCode(await build({ target: 'dom', rootAttributes: ['stroke-width'] }, ENTRY_ROOT_ATTRS));
+
+      expect(code).toContain(JSON.stringify({ 'stroke-width': '1.5' }));
+      expect(code).not.toContain(HEROICON_ATTRS);
+    });
+
+    it('passes aria-hidden and data-slot when the user list names them', async () => {
+      const code = chunkCode(
+        await build({ target: 'dom', rootAttributes: ['aria-hidden', 'data-slot'] }, ENTRY_ROOT_ATTRS),
+      );
+
+      expect(code).toContain(JSON.stringify({ 'aria-hidden': 'true', 'data-slot': 'icon' }));
     });
   });
 
