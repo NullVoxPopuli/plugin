@@ -142,9 +142,23 @@ svgJar({
 
   // Attributes copied from the root <svg> of each source file to the <svg>
   // that the runtime renders. See "Root attributes" below.
-  // Default: inheritable presentation attributes such as fill, stroke and
-  // stroke-width. A list given here replaces the default list.
-  rootAttributes: ['fill', 'stroke', 'stroke-width'],
+  // Default: the list below. A list given here replaces the default list.
+  rootAttributes: [
+    'fill',
+    'fill-opacity',
+    'fill-rule',
+    'stroke',
+    'stroke-width',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'stroke-opacity',
+    'clip-rule',
+    'opacity',
+    'color',
+  ],
 
   // Sprite sheets to inline into the HTML document rather than emit as
   // external files. See "Embedded sprites" below.
