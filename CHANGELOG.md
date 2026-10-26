@@ -1,5 +1,20 @@
 # Changelog
 
+## Release (2026-10-26)
+
+* @svg-jar/plugin 1.0.0 (major)
+
+#### :boom: Breaking Change
+* `@svg-jar/plugin`
+  * [#20](https://github.com/svg-jar/plugin/pull/20) Keep root `<svg>` attributes such as fill and stroke on rendered icons ([@evoactivity](https://github.com/evoactivity))
+
+#### :rocket: Enhancement
+* `@svg-jar/plugin`
+  * [#22](https://github.com/svg-jar/plugin/pull/22) Export the baseline SVGO config so custom configs can extend it ([@evoactivity](https://github.com/evoactivity))
+
+#### Committers: 1
+- Liam ([@evoactivity](https://github.com/evoactivity))
+
 ## Release (2026-10-21)
 
 * @svg-jar/plugin 0.2.2 (patch)
