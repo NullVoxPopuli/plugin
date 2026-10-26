@@ -13,9 +13,10 @@ export interface SvgJarOptions {
 
   /**
    * SVGO configuration.
-   * - `true` (default): use baseline config with sensible defaults
+   * - `true` (default): use `baselineSvgoConfig`
    * - `false`: disable optimization entirely
-   * - object: custom SVGO config, deep-merged with baseline
+   * - object: custom SVGO config, used in place of the baseline. To extend
+   *   the baseline, copy `baselineSvgoConfig.plugins` into it.
    */
   svgo?: boolean | SvgoConfig;
 
