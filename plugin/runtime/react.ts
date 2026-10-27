@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
-// @ts-expect-error react is a peer dependency provided by the consuming app
-import { createElement, useCallback } from 'react';
+import { createElement, useCallback, type ReactElement, type ReactNode, type SVGProps } from 'react';
+
+type SvgProps = SVGProps<SVGSVGElement> & { children?: ReactNode };
 
 /**
  * Converts attribute names to the camelCase prop names React expects,
@@ -36,18 +36,12 @@ export const createSvg: (
   height: string | null,
   href: string,
   rootAttrs?: Record<string, string> | null,
-) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (
-  viewBox,
-  width,
-  height,
-  href,
-  rootAttrs,
-) => {
+) => (props: SvgProps) => ReactElement = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, href, rootAttrs) => {
   const useEl = createElement('use', { href });
   const rootProps = toReactProps(rootAttrs);
 
-  return (props: unknown) => {
-    const { children, ...rest } = props as Record<string, unknown>;
+  return (props: SvgProps) => {
+    const { children, ...rest } = props;
     return createElement(
       'svg',
       { viewBox: viewBox ?? undefined, width: width ?? undefined, height: height ?? undefined, ...rootProps, ...rest },
@@ -78,17 +72,11 @@ export const createSvgInline: (
   height: string | null,
   xml: string,
   rootAttrs?: Record<string, string> | null,
-) => (props: unknown) => Record<string, unknown> = /*#__NO_SIDE_EFFECTS__*/ (
-  viewBox,
-  width,
-  height,
-  xml,
-  rootAttrs,
-) => {
+) => (props: SvgProps) => ReactElement = /*#__NO_SIDE_EFFECTS__*/ (viewBox, width, height, xml, rootAttrs) => {
   const rootProps = toReactProps(rootAttrs);
 
-  return (props: unknown) => {
-    const { children, ...rest } = props as Record<string, unknown>;
+  return (props: SvgProps) => {
+    const { children, ...rest } = props;
     const setMarkup = useCallback((node: SVGGElement | null) => {
       if (node) node.innerHTML = xml;
     }, []);

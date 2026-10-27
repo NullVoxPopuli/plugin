@@ -361,30 +361,56 @@ Available client types:
 > [!NOTE]
 > If your project also uses `vite/client` types, its `*.svg` declaration (which types SVGs as `string`) may conflict with the plugin's component types.
 
+### Typing an icon
+
+Each target exports its component type as `SvgComponent` from `@svg-jar/plugin/types/<target>`. Use it to type a variable, prop or config field that holds an SVG import, instead of writing out the type yourself.
+
+```ts
+// sidebar.ts (Ember example)
+import type { SvgComponent } from '@svg-jar/plugin/types/ember';
+import UsersIcon from './icons/users.svg';
+
+interface Section {
+  title: string;
+  icon: SvgComponent;
+}
+
+export const sections: Section[] = [{ title: 'Users', icon: UsersIcon }];
+```
+
+```tsx
+// React example
+import type { SvgComponent } from '@svg-jar/plugin/types/react';
+
+function NavLink({ href, icon: Icon, label }: { href: string; icon: SvgComponent; label: string }) {
+  return (
+    <a href={href}>
+      <Icon aria-hidden="true" />
+      {label}
+    </a>
+  );
+}
+```
+
+The `dom` target also exports `SvgOptions`, the options type its factory function accepts.
+
+Importing from `@svg-jar/plugin/types/<target>` only gives you the types. The `*.svg` module declarations still come from the `client` entry in your tsconfig.
+
 ### Custom module declarations
 
 TypeScript can't match two wildcards in a module specifier, so named sprite queries (`?sprite=name`) and combined query params (`?current-color&sprite=icons`) aren't covered by the built-in declarations. Add your own in a `.d.ts` file included by your tsconfig:
 
 ```ts
-// svg.d.ts (React example)
+// svg.d.ts (Ember example)
 declare module '*.svg?sprite=icons' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/ember';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }
 ```
 
-For the `dom` target:
-
-```ts
-declare module '*.svg?sprite=icons' {
-  import type { SvgOptions } from '@svg-jar/plugin/runtime/dom';
-
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
-}
-```
+For other targets, change `ember` in the import path to your target, e.g. `@svg-jar/plugin/types/react`.
 
 The `?file` query always exports a `string` URL regardless of target, so no custom declaration is needed for combined file queries.
 

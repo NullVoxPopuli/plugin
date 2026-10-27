@@ -1,6 +1,6 @@
 declare module '*.svg?sprite=shapes' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/react';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }

@@ -1,6 +1,6 @@
 declare module '*.svg?sprite=shapes' {
-  import type { Component, JSX, ParentProps } from 'solid-js';
+  import type { SvgComponent } from '@svg-jar/plugin/types/solid';
 
-  const component: Component<ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>>;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }

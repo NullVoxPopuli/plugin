@@ -7,35 +7,35 @@
 //       "types": ["@svg-jar/plugin/client/dom"]
 //     }
 //   }
-
-interface SvgOptions {
-  /** Creates a `<title>` child element for accessibility. */
-  title?: string;
-  /** Creates a `<desc>` child element for accessibility. */
-  desc?: string;
-  /** Any other properties are set as attributes on the `<svg>` element. */
-  [attr: string]: string | undefined;
-}
+//
+// The component type is exported by name from "@svg-jar/plugin/types/dom".
 
 declare module '*.svg' {
-  /** Factory function that creates a new SVG DOM element on each call. */
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?current-color' {
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?file' {

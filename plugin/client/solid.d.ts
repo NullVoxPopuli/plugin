@@ -7,33 +7,35 @@
 //       "types": ["@svg-jar/plugin/client/solid"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/solid".
 
 declare module '*.svg' {
-  import type { Component, JSX, ParentProps } from 'solid-js';
+  import type { SvgComponent } from '@svg-jar/plugin/types/solid';
 
-  const component: Component<ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>>;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?current-color' {
-  import type { Component, JSX, ParentProps } from 'solid-js';
+  import type { SvgComponent } from '@svg-jar/plugin/types/solid';
 
-  const component: Component<ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>>;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  import type { Component, JSX, ParentProps } from 'solid-js';
+  import type { SvgComponent } from '@svg-jar/plugin/types/solid';
 
-  const component: Component<ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>>;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  import type { Component, JSX, ParentProps } from 'solid-js';
+  import type { SvgComponent } from '@svg-jar/plugin/types/solid';
 
-  const component: Component<ParentProps<JSX.SvgSVGAttributes<SVGSVGElement>>>;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?file' {

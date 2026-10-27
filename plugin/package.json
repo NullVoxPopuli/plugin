@@ -71,6 +71,27 @@
     "./client/web-component": {
       "types": "./client/web-component.d.ts"
     },
+    "./types/dom": {
+      "types": "./client/dom-types.d.ts"
+    },
+    "./types/ember": {
+      "types": "./client/ember-types.d.ts"
+    },
+    "./types/react": {
+      "types": "./client/react-types.d.ts"
+    },
+    "./types/preact": {
+      "types": "./client/preact-types.d.ts"
+    },
+    "./types/vue": {
+      "types": "./client/vue-types.d.ts"
+    },
+    "./types/solid": {
+      "types": "./client/solid-types.d.ts"
+    },
+    "./types/web-component": {
+      "types": "./client/web-component-types.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
@@ -102,7 +123,9 @@
     "unplugin": "^3.0.0"
   },
   "devDependencies": {
+    "@glint/template": "^1.11.0",
     "@playwright/test": "^1.59.1",
+    "@types/react": "^19.2.14",
     "execa": "catalog:",
     "rolldown": "catalog:",
     "rollup": "catalog:",

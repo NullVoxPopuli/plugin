@@ -7,33 +7,35 @@
 //       "types": ["@svg-jar/plugin/client/vue"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/vue".
 
 declare module '*.svg' {
-  import type { Component } from 'vue';
+  import type { SvgComponent } from '@svg-jar/plugin/types/vue';
 
-  const component: Component;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?current-color' {
-  import type { Component } from 'vue';
+  import type { SvgComponent } from '@svg-jar/plugin/types/vue';
 
-  const component: Component;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  import type { Component } from 'vue';
+  import type { SvgComponent } from '@svg-jar/plugin/types/vue';
 
-  const component: Component;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  import type { Component } from 'vue';
+  import type { SvgComponent } from '@svg-jar/plugin/types/vue';
 
-  const component: Component;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?file' {
