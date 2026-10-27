@@ -1,15 +1,11 @@
 {
   "solution": {
     "@svg-jar/plugin": {
-      "impact": "major",
-      "oldVersion": "0.2.2",
-      "newVersion": "1.0.0",
+      "impact": "minor",
+      "oldVersion": "1.0.0",
+      "newVersion": "1.1.0",
       "tagName": "latest",
       "constraints": [
-        {
-          "impact": "major",
-          "reason": "Appears in changelog section :boom: Breaking Change"
-        },
         {
           "impact": "minor",
           "reason": "Appears in changelog section :rocket: Enhancement"
@@ -18,5 +14,5 @@
       "pkgJSONPath": "./plugin/package.json"
     }
   },
-  "description": "## Release (2026-10-26)\n\n* @svg-jar/plugin 1.0.0 (major)\n\n#### :boom: Breaking Change\n* `@svg-jar/plugin`\n  * [#20](https://github.com/svg-jar/plugin/pull/20) Keep root `<svg>` attributes such as fill and stroke on rendered icons ([@evoactivity](https://github.com/evoactivity))\n\n#### :rocket: Enhancement\n* `@svg-jar/plugin`\n  * [#22](https://github.com/svg-jar/plugin/pull/22) Export the baseline SVGO config so custom configs can extend it ([@evoactivity](https://github.com/evoactivity))\n\n#### Committers: 1\n- Liam ([@evoactivity](https://github.com/evoactivity))\n"
+  "description": "## Release (2026-10-27)\n\n* @svg-jar/plugin 1.1.0 (minor)\n\n#### :rocket: Enhancement\n* `@svg-jar/plugin`\n  * [#23](https://github.com/svg-jar/plugin/pull/23) Export a named SvgComponent type for each target ([@evoactivity](https://github.com/evoactivity))\n\n#### Committers: 1\n- Liam ([@evoactivity](https://github.com/evoactivity))\n"
 }
