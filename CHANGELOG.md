@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2026-10-27)
+
+* @svg-jar/plugin 1.1.0 (minor)
+
+#### :rocket: Enhancement
+* `@svg-jar/plugin`
+  * [#23](https://github.com/svg-jar/plugin/pull/23) Export a named SvgComponent type for each target ([@evoactivity](https://github.com/evoactivity))
+
+#### Committers: 1
+- Liam ([@evoactivity](https://github.com/evoactivity))
+
 ## Release (2026-10-26)
 
 * @svg-jar/plugin 1.0.0 (major)
