@@ -7,32 +7,34 @@
 //       "types": ["@svg-jar/plugin/client/react"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/react".
 
 declare module '*.svg' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/react';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?current-color' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/react';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/react';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  import type { FC, SVGAttributes, ReactNode } from 'react';
+  import type { SvgComponent } from '@svg-jar/plugin/types/react';
 
-  const Component: FC<SVGAttributes<SVGSVGElement> & { children?: ReactNode }>;
+  const Component: SvgComponent;
   export default Component;
 }
 

@@ -7,52 +7,34 @@
 //       "types": ["@svg-jar/plugin/client/ember"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/ember".
 
 declare module '*.svg' {
-  import type { ComponentLike } from '@glint/template';
+  import type { SvgComponent } from '@svg-jar/plugin/types/ember';
 
-  const Component: ComponentLike<{
-    Element: SVGSVGElement;
-    Blocks: {
-      default: [];
-    };
-  }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?current-color' {
-  import type { ComponentLike } from '@glint/template';
+  import type { SvgComponent } from '@svg-jar/plugin/types/ember';
 
-  const Component: ComponentLike<{
-    Element: SVGSVGElement;
-    Blocks: {
-      default: [];
-    };
-  }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  import type { ComponentLike } from '@glint/template';
+  import type { SvgComponent } from '@svg-jar/plugin/types/ember';
 
-  const Component: ComponentLike<{
-    Element: SVGSVGElement;
-    Blocks: {
-      default: [];
-    };
-  }>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  import type { ComponentLike } from '@glint/template';
+  import type { SvgComponent } from '@svg-jar/plugin/types/ember';
 
-  const Component: ComponentLike<{
-    Element: SVGSVGElement;
-    Blocks: {
-      default: [];
-    };
-  }>;
+  const Component: SvgComponent;
   export default Component;
 }
 

@@ -1,20 +1,20 @@
 declare module '*.svg?sprite=shapes' {
-  import type { SvgOptions } from '@svg-jar/plugin/runtime/dom';
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
 
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?sprite=animated' {
-  import type { SvgOptions } from '@svg-jar/plugin/runtime/dom';
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
 
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?sprite=fonts' {
-  import type { SvgOptions } from '@svg-jar/plugin/runtime/dom';
+  import type { SvgComponent } from '@svg-jar/plugin/types/dom';
 
-  const component: (options?: SvgOptions) => SVGSVGElement;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }

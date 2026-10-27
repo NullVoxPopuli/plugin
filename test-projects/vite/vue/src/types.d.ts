@@ -1,6 +1,6 @@
 declare module '*.svg?sprite=shapes' {
-  import type { Component } from 'vue';
+  import type { SvgComponent } from '@svg-jar/plugin/types/vue';
 
-  const component: Component;
-  export default component;
+  const Component: SvgComponent;
+  export default Component;
 }

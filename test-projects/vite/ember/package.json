@@ -22,7 +22,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "start": "vite"
+    "start": "vite",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ember/test-waiters": "^4.1.1",
@@ -40,9 +41,11 @@
     "@babel/runtime": "7.29.2",
     "@embroider/core": "4.4.7",
     "@embroider/vite": "1.7.2",
+    "@glint/template": "^1.11.0",
     "@rollup/plugin-babel": "6.1.0",
     "@svg-jar/plugin": "workspace:*",
     "babel-plugin-ember-template-compilation": "4.0.0",
+    "typescript": "catalog:",
     "vite": "7.3.2"
   },
   "engines": {

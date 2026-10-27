@@ -7,26 +7,35 @@
 //       "types": ["@svg-jar/plugin/client/web-component"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/web-component".
 
 declare module '*.svg' {
-  /** Custom element class to register with customElements.define(). */
-  const ElementClass: typeof HTMLElement;
-  export default ElementClass;
+  import type { SvgComponent } from '@svg-jar/plugin/types/web-component';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?current-color' {
-  const ElementClass: typeof HTMLElement;
-  export default ElementClass;
+  import type { SvgComponent } from '@svg-jar/plugin/types/web-component';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  const ElementClass: typeof HTMLElement;
-  export default ElementClass;
+  import type { SvgComponent } from '@svg-jar/plugin/types/web-component';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  const ElementClass: typeof HTMLElement;
-  export default ElementClass;
+  import type { SvgComponent } from '@svg-jar/plugin/types/web-component';
+
+  const Component: SvgComponent;
+  export default Component;
 }
 
 declare module '*.svg?file' {

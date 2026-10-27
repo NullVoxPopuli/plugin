@@ -7,32 +7,34 @@
 //       "types": ["@svg-jar/plugin/client/preact"]
 //     }
 //   }
+//
+// The component type is exported by name from "@svg-jar/plugin/types/preact".
 
 declare module '*.svg' {
-  import type { FunctionComponent, JSX } from 'preact';
+  import type { SvgComponent } from '@svg-jar/plugin/types/preact';
 
-  const Component: FunctionComponent<JSX.SVGAttributes<SVGSVGElement>>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?current-color' {
-  import type { FunctionComponent, JSX } from 'preact';
+  import type { SvgComponent } from '@svg-jar/plugin/types/preact';
 
-  const Component: FunctionComponent<JSX.SVGAttributes<SVGSVGElement>>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?skip-current-color' {
-  import type { FunctionComponent, JSX } from 'preact';
+  import type { SvgComponent } from '@svg-jar/plugin/types/preact';
 
-  const Component: FunctionComponent<JSX.SVGAttributes<SVGSVGElement>>;
+  const Component: SvgComponent;
   export default Component;
 }
 
 declare module '*.svg?unsafe-inline' {
-  import type { FunctionComponent, JSX } from 'preact';
+  import type { SvgComponent } from '@svg-jar/plugin/types/preact';
 
-  const Component: FunctionComponent<JSX.SVGAttributes<SVGSVGElement>>;
+  const Component: SvgComponent;
   export default Component;
 }
 
